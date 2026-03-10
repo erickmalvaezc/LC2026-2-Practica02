@@ -31,15 +31,47 @@ type Estado = [String]
 
 --Ejercicio 1
 variables :: Prop -> [String]
-variables = undefined
+variables p = sinRepetidos (vars p)
+  where
+    vars (Var x) = [x]
+    vars (Cons _) = []
+    vars (Not x) = vars x
+    vars (Or x y) = vars x ++ vars y
+    vars (And x y) = vars x ++ vars y
+    vars (Impl x y) = vars x ++ vars y
+    vars (Syss x y) = vars x ++ vars y
+
+    
+elimina :: String -> [String] -> [String]
+elimina _ [] = []
+elimina x (y:ys)
+    | x == y    = elimina x ys
+    | otherwise = y : elimina x ys
+
+sinRepetidos :: [String] -> [String]
+sinRepetidos [] = []
+sinRepetidos (x:xs) = x : sinRepetidos (elimina x xs)
+
 
 --Ejercicio 2
 interpretacion :: Prop -> Estado -> Bool
-interpretacion = undefined
+interpretacion (Cons b) _ = b
+interpretacion (Var x) e = pertenece x e
+interpretacion (Not p) e = not (interpretacion p e)
+interpretacion (And p q) e = interpretacion p e && interpretacion q e
+interpretacion (Or p q) e = interpretacion p e || interpretacion q e
+interpretacion (Impl p q) e = not (interpretacion p e) || interpretacion q e
+interpretacion (Syss p q) e = interpretacion p e == interpretacion q e
+
+pertenece :: String -> Estado -> Bool
+pertenece _ [] = False
+pertenece x (y:ys)
+    | x == y = True
+    | otherwise = pertenece x ys
 
 --Ejercicio 3
 estadosPosibles :: Prop -> [Estado]
-estadosPosibles = undefined
+estadosPosibles x = conjPotencia(variables x)
 
 --Ejercicio 4
 modelos :: Prop -> [Estado]
