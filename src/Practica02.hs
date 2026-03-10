@@ -75,11 +75,18 @@ estadosPosibles x = conjPotencia(variables x)
 
 --Ejercicio 4
 modelos :: Prop -> [Estado]
-modelos = undefined
+modelos x = casos x (estadosPosibles x)
+
+casos :: Prop -> [Estado] -> [Estado]
+casos _ [] = []
+casos p (e:es)  
+    |interpretacion p e == True = e : casos p es 
+    |interpretacion p e == False = casos p es
 
 --Ejercicio 5
 sonEquivalentes :: Prop -> Prop -> Bool
-sonEquivalentes = undefined
+sonEquivalentes p q = modelos pyq == estadosPosibles pyq
+    where pyq = Syss p q
 
 --Ejercicio 6 
 tautologia :: Prop -> Bool
