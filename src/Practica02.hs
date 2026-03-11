@@ -90,16 +90,16 @@ sonEquivalentes p q = modelos pyq == estadosPosibles pyq
 
 --Ejercicio 6 
 tautologia :: Prop -> Bool
-tautologia = undefined
+tautologia p = modelos p == estadosPosibles p
 
 --Ejercicio 7
 contradiccion :: Prop -> Bool
-contradiccion = undefined
+contradiccion p = modelos p == []
 
 --Ejercicio 8
 consecuenciaLogica :: [Prop] -> Prop -> Bool
-consecuenciaLogica = undefined
-
+consecuenciaLogica [] q = tautologia (Impl (Cons True) q)
+consecuenciaLogica (p:ps) q = tautologia (Impl (And p (foldr And (Cons True) ps)) q)
 
 --Funcion auxiliar
 conjPotencia :: [a] -> [[a]]
